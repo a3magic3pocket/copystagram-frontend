@@ -19,7 +19,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <div className="flex justify-center items-center">
-          <div className="flex main-content-wrap bg-black border border-black border-solid">
+          <div className="flex main-content-wrap bg-pink-800 border border-black border-solid">
             {children}
           </div>
         </div>
