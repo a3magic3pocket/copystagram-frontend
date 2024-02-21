@@ -22,6 +22,11 @@
   }
 }
 
+@font-face {
+  font-family: "aAdulsaScript";
+  src: url("/font/aAdulsaScript.ttf") format("truetype");
+}
+
 body {
   color: white;
 }
