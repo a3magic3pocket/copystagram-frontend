@@ -1,9 +1,6 @@
-import {
-  faComment,
-  faHeart,
-  faPaperPlane,
-} from "@fortawesome/free-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import LikeIcon from "@/component/icon/Like";
+import MessageIcon from "@/component/icon/Message";
+import ReplyIcon from "@/component/icon/Reply";
 
 export default function Post() {
   return (
@@ -22,14 +19,9 @@ export default function Post() {
       <div className="flex w-full aspect-square bg-red-500">게시 사진</div>
       <div className="flex flex-row justify-stretch align-items">
         <div className="flex flex-row w-[calc(100%/3)]">
-          <FontAwesomeIcon icon={faHeart} size="lg" className="p-1" />
-          <FontAwesomeIcon icon={faComment} size="lg" flip="horizontal" className="p-1" />
-          <FontAwesomeIcon
-            icon={faPaperPlane}
-            size="lg"
-            transform={{ rotate: 26 }}
-            className="p-1"
-          />
+          <LikeIcon />
+          <ReplyIcon />
+          <MessageIcon />
         </div>
         <div className="flex w-[calc(100%/3)] justify-center align-items">
           ...
