@@ -17,13 +17,13 @@ export default function Post() {
         </div>
       </div>
       <div className="flex w-full aspect-square bg-red-500">게시 사진</div>
-      <div className="flex flex-row justify-stretch align-items">
+      <div className="flex flex-row justify-stretch">
         <div className="flex flex-row w-[calc(100%/3)]">
           <LikeIcon />
           <ReplyIcon />
           <MessageIcon />
         </div>
-        <div className="flex w-[calc(100%/3)] justify-center align-items">
+        <div className="flex w-[calc(100%/3)] justify-center">
           ...
         </div>
         <div className="flex w-[calc(100%/3)]"></div>
