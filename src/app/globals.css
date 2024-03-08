@@ -36,3 +36,8 @@ body {
   width: 430px;
   min-height: 100vh;
 }
+
+.post-slide {
+  padding-bottom: 2.8rem !important;
+}
+

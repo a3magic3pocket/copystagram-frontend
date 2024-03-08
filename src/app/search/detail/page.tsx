@@ -1,6 +1,5 @@
 import Post from "@/component/Post";
 import Title from "@/component/Title";
-import GoBackIcon from "@/component/icon/GoBack";
 
 export default function Page() {
   return (
