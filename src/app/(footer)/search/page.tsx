@@ -1,13 +1,11 @@
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import SearchIcon from "@/component/icon/Search";
 
 export default function Page() {
   return (
     <div className="flex flex-col w-full h-full">
       <div className="flex w-full justify-center items-center border border-black border-solid relative">
-        <FontAwesomeIcon
-          icon={faMagnifyingGlass}
-          size={"sm"}
+        <SearchIcon
+          size="sm"
           className="absolute left-0 ml-7 text-stone-500"
         />
         <input
