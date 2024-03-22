@@ -6,8 +6,10 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 import PositiveBtn from "@/component/button/PositiveBtn";
 import Title from "@/component/Title";
+import axios from "axios";
 
 export default function Page() {
+  const descRef = useRef<HTMLTextAreaElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const [contents, setContents] = useState<File[]>([]);
   const [isShowUploadButton, setIsShowUploadButton] = useState(true);
@@ -39,6 +41,27 @@ export default function Page() {
     if (contents.length > 0) {
       setContents(contents);
     }
+  };
+
+  const handleSubmit = () => {
+    const description = descRef.current?.value;
+
+    const formData = new FormData();
+    contents.forEach((content) => {
+      if (content.size === 0) {
+        return;
+      }
+      formData.append("image", content);
+    });
+    formData.append("description", description || "");
+
+    const url = "http://localhost:8080/v1/post";
+    axios.post(url, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    });
   };
 
   return (
@@ -117,6 +140,7 @@ export default function Page() {
             cols={30}
             rows={10}
             maxLength={1000}
+            ref={descRef}
           ></textarea>
         </div>
       </div>
@@ -129,6 +153,7 @@ export default function Page() {
         <PositiveBtn
           className="w-[calc(100%-1rem)] m-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           text="공유"
+          onClick={() => handleSubmit()}
         />
       </div>
     </div>
