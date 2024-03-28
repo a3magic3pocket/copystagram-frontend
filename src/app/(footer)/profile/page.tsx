@@ -1,8 +1,34 @@
+"use client";
+
+import { urlKey } from "@/config/urlMapKey";
+import { getMyUserInfo } from "@/query/copystagram/getMyUserInfo";
+import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+
 export default function Page() {
+  const router = useRouter();
+  const query = useQuery({
+    queryKey: [urlKey.COPYSTAGRAM_GET_MY_USER_INFO],
+    queryFn: getMyUserInfo,
+  });
+
+  useEffect(() => {
+    console.log("query.data", query.data?.data);
+  }, [query]);
+
+  if (query.isError) {
+    router.push("/error");
+  }
+
+  if (query.isLoading) {
+    return <div className="flex">loading...</div>;
+  }
+
   return (
     <div className="flex flex-col w-full">
       <div className="flex flex-row w-full justify-between">
-        <div className="flex text-4xl pl-2">myID</div>
+        <div className="flex text-4xl pl-2">{query.data?.data.name}</div>
       </div>
       <div className="flex flex-row justify-start">
         <div className="flex relative w-20 m-4 aspect-square rounded-full bg-yellow-500">
@@ -20,16 +46,16 @@ export default function Page() {
             <p className="text-sm">게시글</p>
           </div>
           <div className="flex flex-col items-center px-5">
-            <p>121</p>
+            <p>0</p>
             <p className="text-sm">팔로워</p>
           </div>
           <div className="flex flex-col items-center px-5">
-            <p>121</p>
+            <p>0</p>
             <p className="text-sm">팔로잉</p>
           </div>
         </div>
       </div>
-      <div className="flex p-2">2123157 hjkl vnbm 26+86 78465 jioko</div>
+      <div className="flex p-2">{query.data?.data.description}</div>
       <div className="flex flex-row justify-evenly pb-2">
         <button className="flex w-[calc(100%/2-0.8rem)] rounded-lg bg-stone-700 justify-center items-center">
           프로필 편집

@@ -5,6 +5,7 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import { QueryProvider } from "../query";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,7 +24,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <div className="flex justify-center items-center">
           <div className="flex flex-col main-content-wrap bg-pink-800 border border-black border-solid">
-            {children}
+            <QueryProvider>{children}</QueryProvider>
           </div>
         </div>
         {/* 430 x 932 */}
