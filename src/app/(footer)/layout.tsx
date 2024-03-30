@@ -19,8 +19,10 @@ export default function layout({
 }>) {
   return (
     <>
-      {children}
-      <div className="flex flex-row sticky bottom-0 justify-evenly items-center bg-yellow-500 ">
+      <div className="flex min-h-[calc(100vh-3.2rem)]">
+        {children}
+      </div>
+      <div className="flex h-[3.2] flex-row sticky bottom-0 justify-evenly items-center bg-yellow-500 ">
         <Link href="/search">
           <SearchIcon size="2xl" className="p-2" />
         </Link>
