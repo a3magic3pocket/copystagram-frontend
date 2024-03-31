@@ -37,15 +37,15 @@ export default function Page() {
   const [qryThumbs, qryDetails] = useQueries({
     queries: [
       {
-        queryKey: [urlKey.COPYSTAGRAM_GET_LATEST_MY_POSTS, thumbsPageNum],
+        queryKey: [urlKey.COPYSTAGRAM_GET_ALL_POSTS, thumbsPageNum],
         queryFn: () => getAllPosts(thumbsPageNum),
         // enabled: !!pageNum,
         // placeholderData: keepPreviousData,
         staleTime: Infinity,
       },
       {
-        queryKey: [urlKey.COPYSTAGRAM_GET_LATEST_MY_POSTS, detailPageNum],
-        queryFn: () => getMyLatestPosts(detailPageNum),
+        queryKey: [urlKey.COPYSTAGRAM_GET_ALL_POSTS, detailPageNum],
+        queryFn: () => getAllPosts(detailPageNum),
         // enabled: !!pageNum,
         // placeholderData: keepPreviousData,
         staleTime: Infinity,

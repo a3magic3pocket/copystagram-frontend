@@ -1,8 +1,14 @@
 import Post from "@/component/Post";
 import LikeIcon from "@/component/icon/Like";
 import MessageIcon from "@/component/icon/Message";
+import { redirect } from "next/navigation";
 
 export default function Page() {
+  const undeveloped = true;
+  if (undeveloped) {
+    redirect("/search");
+  }
+
   return (
     <div className="flex flex-col w-full">
       <div className="flex flex-row w-full h-full justify-between">
@@ -13,9 +19,6 @@ export default function Page() {
         </div>
       </div>
       <div>main</div>
-      {/* {[...Array(3)].map((_, i) => {
-        return <Post key={i} />;
-      })} */}
     </div>
   );
 }
