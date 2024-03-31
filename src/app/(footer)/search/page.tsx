@@ -153,6 +153,10 @@ export default function Page() {
     router.push("/error");
   }
 
+  if (qryThumbs.isLoading) {
+    return <Loading />;
+  }
+
   return (
     <div className="flex flex-col w-full h-full">
       {/* search bar */}

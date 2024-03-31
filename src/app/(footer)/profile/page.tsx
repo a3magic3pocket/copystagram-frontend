@@ -132,11 +132,7 @@ export default function Page() {
   }
 
   if (qryUserInfo.isLoading) {
-    return (
-      <div className="flex w-full justify-center items-center">
-        <Loading />
-      </div>
-    );
+    return <Loading />;
   }
 
   return (

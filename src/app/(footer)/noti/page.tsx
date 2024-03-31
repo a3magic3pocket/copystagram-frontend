@@ -8,9 +8,11 @@ import { INotiInfo } from "@/inteface/notiInfo.inteface";
 import { INotiInfoList } from "@/inteface/notiInfoList.interface";
 import { getMyNotis } from "@/query/copystagram/getMyNotis";
 import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 export default function Page() {
+  const router = useRouter();
   const notiBottomRef = useRef<HTMLDivElement>(null);
   const [pageNum, setPageNum] = useState(1);
   const [emptyPageNum, setEmptyPageNum] = useState(-1);
@@ -48,6 +50,14 @@ export default function Page() {
       setPageNum(emptyPageNum);
     }
   }, [qry.data, emptyPageNum, pageNum]);
+
+  if (qry.isError) {
+    router.push("/error");
+  }
+
+  if (qry.isLoading) {
+    return <Loading />
+  }
 
   return (
     <div className="flex flex-col w-full justify-start">
