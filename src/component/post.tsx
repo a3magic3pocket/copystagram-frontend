@@ -4,6 +4,8 @@ import ReplyIcon from "@/component/icon/Reply";
 import { IPostInfo } from "@/inteface/postInfo.inteface";
 import { getImageUrl } from "@/util/image";
 import Image from "next/image";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination } from "swiper/modules";
 
 export default function Post(props: IPostInfo) {
   const undeveloped = true;
@@ -32,12 +34,26 @@ export default function Post(props: IPostInfo) {
         </div>
       </div>
       <div className="flex w-full aspect-square bg-red-500">
-        <Image
-          src={getImageUrl(props.contentImagePaths[0])}
-          alt={"post-image"}
-          width={500}
-          height={500}
-        />
+        <Swiper
+          slidesPerView={1}
+          pagination={{
+            clickable: true,
+          }}
+          modules={[Pagination]}
+        >
+          {props.contentImagePaths.map((imagePath, i) => {
+            return (
+              <SwiperSlide key={imagePath}>
+                <Image
+                  src={getImageUrl(imagePath)}
+                  alt={"post-image"}
+                  width={500}
+                  height={500}
+                />
+              </SwiperSlide>
+            );
+          })}
+        </Swiper>
       </div>
       <div className="flex flex-row justify-stretch">
         <div className="flex flex-row w-[calc(100%/3)]">
@@ -45,7 +61,7 @@ export default function Post(props: IPostInfo) {
           {!undeveloped && <ReplyIcon />}
           {!undeveloped && <MessageIcon />}
         </div>
-        <div className="flex w-[calc(100%/3)] justify-center">...</div>
+        <div className="flex w-[calc(100%/3)] justify-center"></div>
         <div className="flex w-[calc(100%/3)]"></div>
       </div>
       <div className="flex flex-col p-2">

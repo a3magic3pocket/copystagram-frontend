@@ -39,7 +39,6 @@ export default function Page() {
     contents.push(new File([], "empty"));
 
     if (contents.length > 0) {
-      console.log('contents', contents);
       setContents(contents);
     }
   };
