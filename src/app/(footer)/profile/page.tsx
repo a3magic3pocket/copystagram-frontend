@@ -32,10 +32,12 @@ export default function Page() {
       {
         queryKey: [urlKey.COPYSTAGRAM_GET_MY_USER_INFO],
         queryFn: getMyUserInfo,
+        staleTime: Infinity,
       },
       {
         queryKey: [urlKey.COPYSTAGRAM_GET_LATEST_MY_POSTS, pageNum],
         queryFn: () => getMyLatestPosts(pageNum),
+        staleTime: Infinity,
         // enabled: !!pageNum,
         // placeholderData: keepPreviousData,
       },

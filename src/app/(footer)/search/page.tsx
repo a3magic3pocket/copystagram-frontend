@@ -7,18 +7,21 @@ import MessageIcon from "@/component/icon/Message";
 import SearchIcon from "@/component/icon/Search";
 import Loading from "@/component/loading/Loading";
 import BaseTitle from "@/component/title/BaseTitle";
-import { urlKey } from "@/config/urlMapKey";
+import Link from "next/link";
+import Image from "next/image";
 import useIntersectionObserver from "@/hook/useIntersectionObserver";
+import { urlKey } from "@/config/urlMapKey";
 import { IPostInfo } from "@/inteface/postInfo.inteface";
 import { IPostInfoList } from "@/inteface/postInfoList.inteface";
 import { getAllPosts } from "@/query/copystagram/getAllPosts";
 import { getMyLatestPosts } from "@/query/copystagram/getMyLatestPosts";
 import { getImageUrl } from "@/util/image";
 import { useQueries } from "@tanstack/react-query";
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
+  const router = useRouter();
   const undeveloped = true;
   const postBottomRef = useRef<HTMLDivElement>(null);
   const postDetailBottomRef = useRef<HTMLDivElement>(null);
@@ -38,12 +41,14 @@ export default function Page() {
         queryFn: () => getAllPosts(thumbsPageNum),
         // enabled: !!pageNum,
         // placeholderData: keepPreviousData,
+        staleTime: Infinity,
       },
       {
         queryKey: [urlKey.COPYSTAGRAM_GET_LATEST_MY_POSTS, detailPageNum],
         queryFn: () => getMyLatestPosts(detailPageNum),
         // enabled: !!pageNum,
         // placeholderData: keepPreviousData,
+        staleTime: Infinity,
       },
     ],
   });
@@ -144,6 +149,10 @@ export default function Page() {
     }
   }, [qryDetails.data, detailsEmptyPageNum, setDetailPageNum]);
 
+  if (qryThumbs.isError || qryDetails.isError) {
+    router.push("/error");
+  }
+
   return (
     <div className="flex flex-col w-full h-full">
       {/* search bar */}
@@ -164,8 +173,10 @@ export default function Page() {
       <div className="flex flex-row w-full h-full justify-between">
         <div className="flex font-aAdulsaScript text-4xl pl-2">Copystagram</div>
         <div className="flex flex-row pr-2">
-          <LikeIcon className="flex self-center p-2" />
-          <MessageIcon className="flex self-center p-2" />
+          <Link href="/noti">
+            <LikeIcon className="flex self-center p-2" />
+          </Link>
+          {!undeveloped && <MessageIcon className="flex self-center p-2" />}
         </div>
       </div>
 
