@@ -149,10 +149,6 @@ export default function Page() {
     }
   }, [qryDetails.data, detailsEmptyPageNum, setDetailPageNum]);
 
-  if (qryThumbs.isError || qryDetails.isError) {
-    router.push("/error");
-  }
-
   if (qryThumbs.isLoading) {
     return <Loading />;
   }

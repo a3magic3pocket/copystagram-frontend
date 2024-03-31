@@ -127,10 +127,6 @@ export default function Page() {
     }
   }, [showModal, selectedPostIndex, modalRef.current]);
 
-  if (qryUserInfo.isError || qryPostInfos.isError || qryCountPosts.isError) {
-    router.push("/error");
-  }
-
   if (qryUserInfo.isLoading) {
     return <Loading />;
   }

@@ -51,10 +51,6 @@ export default function Page() {
     }
   }, [qry.data, emptyPageNum, pageNum]);
 
-  if (qry.isError) {
-    router.push("/error");
-  }
-
   if (qry.isLoading) {
     return <Loading />
   }
