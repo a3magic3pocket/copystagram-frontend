@@ -19,6 +19,7 @@ import { getImageUrl } from "@/util/image";
 import { useQueries } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import Logo from "@/component/Logo";
 
 export default function Page() {
   const router = useRouter();
@@ -171,7 +172,7 @@ export default function Page() {
 
       {/* tmp main navi */}
       <div className="flex flex-row w-full h-full justify-between">
-        <div className="flex font-aAdulsaScript text-4xl pl-2">Copystagram</div>
+        <Logo />
         <div className="flex flex-row pr-2">
           <Link href="/noti">
             <LikeIcon className="flex self-center p-2" />
