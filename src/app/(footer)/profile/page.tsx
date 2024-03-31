@@ -16,6 +16,8 @@ import type { IPostInfo } from "@/inteface/postInfo.inteface";
 import Post from "@/component/Post";
 import BaseTitle from "@/component/title/BaseTitle";
 import { countMyPosts } from "@/query/copystagram/countMyPosts";
+import PositiveButton from "@/component/button/PositiveBtn";
+import { urlMap } from "@/config/urlMap";
 
 export default function Page() {
   const router = useRouter();
@@ -28,6 +30,7 @@ export default function Page() {
   const [showModal, setShowModal] = useState(false);
   const [selectedPostIndex, setSelectedPostIndex] = useState(-1);
   const undeveloped = true;
+  const copystagramRootUrl = process.env.NEXT_PUBLIC_COPYSTAGRAM_API_URL;
 
   const [qryUserInfo, qryPostInfos, qryCountPosts] = useQueries({
     queries: [
@@ -162,6 +165,15 @@ export default function Page() {
         </div>
       </div>
       <div className="flex p-2">{qryUserInfo.data?.data.description}</div>
+      <div className="flex flex-row justify-end items-center p-1">
+        <PositiveButton
+          text="로그아웃"
+          onClick={() => {
+            const logoutUrl = urlMap(urlKey.COPYSTAGRAM_LOGOUT_URL);
+            router.push(logoutUrl);
+          }}
+        />
+      </div>
       <div
         className={`${
           undeveloped ? "hidden" : "flex"

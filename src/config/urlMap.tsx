@@ -15,6 +15,7 @@ urls[
 urls[
   urlKey.COPYSTAGRAM_COUNY_MY_POSTS
 ] = `${copystagramRootUrl}/v1/my-posts/count`;
+urls[urlKey.COPYSTAGRAM_LOGOUT_URL] = `${copystagramRootUrl}/v1/auth/logout`;
 
 export const urlMap = (urlName: string): string => {
   if (urlName in urls) {

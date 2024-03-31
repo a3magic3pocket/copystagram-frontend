@@ -4,4 +4,5 @@ export const urlKey = {
   COPYSTAGRAM_GET_ALL_POSTS: "copystagram.getAllPosts",
   COPYSTAGRAM_GET_MY_NOTIS: "copystagram.getMyNotis",
   COPYSTAGRAM_COUNY_MY_POSTS: "copystagram.countMyPosts",
+  COPYSTAGRAM_LOGOUT_URL: "copystagram.logoutUrl",
 };
