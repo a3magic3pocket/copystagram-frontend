@@ -1,6 +1,6 @@
 "use client";
 
-import Loading from "@/component/Loading";
+import Loading from "@/component/loading/Loading";
 import { urlKey } from "@/config/urlMapKey";
 import useIntersectionObserver from "@/hook/useIntersectionObserver";
 import { getMyLatestPosts } from "@/query/copystagram/getMyLatestPosts";
@@ -47,12 +47,15 @@ export default function Page() {
     setShowModal(true);
   };
 
-  const [postBottomObserve, postBottomDisconnect] = useIntersectionObserver(() => {
-    setPageNum((pageNum) => pageNum + 1);
-  });
-  const [postBottomDetailObserve, postBottomDetailDisconnect] = useIntersectionObserver(() => {
-    setPageNum((pageNum) => pageNum + 1);
-  });
+  const [postBottomObserve, postBottomDisconnect] = useIntersectionObserver(
+    () => {
+      setPageNum((pageNum) => pageNum + 1);
+    }
+  );
+  const [postBottomDetailObserve, postBottomDetailDisconnect] =
+    useIntersectionObserver(() => {
+      setPageNum((pageNum) => pageNum + 1);
+    });
 
   useEffect(() => {
     if (
@@ -183,11 +186,7 @@ export default function Page() {
             );
           })}
       </div>
-      {q2.isLoading && (
-        <div className="flex justify-center items-center">
-          <Loading />
-        </div>
-      )}
+      {q2.isLoading && <Loading />}
       <div ref={postBottomRef}></div>
 
       <Modal showModal={showModal} ref={modalRef}>
@@ -209,11 +208,7 @@ export default function Page() {
             );
           })}
         <div ref={postDetailBottomRef}></div>
-        {q2.isLoading && (
-          <div className="flex justify-center items-center">
-            <Loading />
-          </div>
-        )}
+        {q2.isLoading && <Loading />}
       </Modal>
     </div>
   );

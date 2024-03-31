@@ -1,13 +1,16 @@
 import SearchIcon from "@/component/icon/Search";
 
 export default function Page() {
+  const undeveloped = true;
+
   return (
     <div className="flex flex-col w-full h-full">
-      <div className="flex w-full justify-center items-center border border-black border-solid relative">
-        <SearchIcon
-          size="sm"
-          className="absolute left-0 ml-7 text-stone-500"
-        />
+      <div
+        className={`${
+          undeveloped ? "hidden" : "flex"
+        }  w-full justify-center items-center border border-black border-solid relative}`}
+      >
+        <SearchIcon size="sm" className="absolute left-0 ml-7 text-stone-500" />
         <input
           type="text"
           placeholder="검색"
