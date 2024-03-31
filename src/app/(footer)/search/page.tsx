@@ -150,10 +150,6 @@ export default function Page() {
     }
   }, [qryDetails.data, detailsEmptyPageNum, setDetailPageNum]);
 
-  if (qryThumbs.isLoading) {
-    return <Loading />;
-  }
-
   return (
     <div className="flex flex-col w-full h-full">
       {/* search bar */}
