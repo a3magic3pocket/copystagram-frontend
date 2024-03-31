@@ -12,6 +12,9 @@ urls[urlKey.COPYSTAGRAM_GET_ALL_POSTS] = `${copystagramRootUrl}/v1/posts`;
 urls[
   urlKey.COPYSTAGRAM_GET_MY_NOTIS
 ] = `${copystagramRootUrl}/v1/my-notifications`;
+urls[
+  urlKey.COPYSTAGRAM_COUNY_MY_POSTS
+] = `${copystagramRootUrl}/v1/my-posts/count`;
 
 export const urlMap = (urlName: string): string => {
   if (urlName in urls) {

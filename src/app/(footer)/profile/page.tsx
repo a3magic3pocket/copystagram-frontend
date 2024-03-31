@@ -15,6 +15,7 @@ import type { IPostInfoList } from "@/inteface/postInfoList.inteface";
 import type { IPostInfo } from "@/inteface/postInfo.inteface";
 import Post from "@/component/Post";
 import BaseTitle from "@/component/title/BaseTitle";
+import { countMyPosts } from "@/query/copystagram/countMyPosts";
 
 export default function Page() {
   const router = useRouter();
@@ -26,8 +27,9 @@ export default function Page() {
   const [emptyPageNum, setEmptyPageNum] = useState<number>(-1);
   const [showModal, setShowModal] = useState(false);
   const [selectedPostIndex, setSelectedPostIndex] = useState(-1);
+  const undeveloped = true;
 
-  const [qryUserInfo, qryPostInfos] = useQueries({
+  const [qryUserInfo, qryPostInfos, qryCountPosts] = useQueries({
     queries: [
       {
         queryKey: [urlKey.COPYSTAGRAM_GET_MY_USER_INFO],
@@ -40,6 +42,11 @@ export default function Page() {
         staleTime: Infinity,
         // enabled: !!pageNum,
         // placeholderData: keepPreviousData,
+      },
+      {
+        queryKey: [urlKey.COPYSTAGRAM_COUNY_MY_POSTS],
+        queryFn: () => countMyPosts(),
+        staleTime: Infinity,
       },
     ],
   });
@@ -120,7 +127,7 @@ export default function Page() {
     }
   }, [showModal, selectedPostIndex, modalRef.current]);
 
-  if (qryUserInfo.isError || qryPostInfos.isError) {
+  if (qryUserInfo.isError || qryPostInfos.isError || qryCountPosts.isError) {
     router.push("/error");
   }
 
@@ -149,7 +156,7 @@ export default function Page() {
         </div>
         <div className="flex flex-row w-80 justify-evenly items-center">
           <div className="flex flex-col items-center px-5">
-            <p>121</p>
+            <p>{qryCountPosts.data ? qryCountPosts.data?.data.count : 0}</p>
             <p className="text-sm">게시글</p>
           </div>
           <div className="flex flex-col items-center px-5">
@@ -163,7 +170,11 @@ export default function Page() {
         </div>
       </div>
       <div className="flex p-2">{qryUserInfo.data?.data.description}</div>
-      <div className="flex flex-row justify-evenly pb-2">
+      <div
+        className={`${
+          undeveloped ? "hidden" : "flex"
+        } flex-row justify-evenly pb-2`}
+      >
         <button className="flex w-[calc(100%/2-0.8rem)] rounded-lg bg-stone-700 justify-center items-center">
           프로필 편집
         </button>
