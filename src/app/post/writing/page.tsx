@@ -7,12 +7,23 @@ import { Pagination } from "swiper/modules";
 import PositiveBtn from "@/component/button/PositiveBtn";
 import Title from "@/component/title/Title";
 import axios from "axios";
+import { useCookies } from "react-cookie";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
+  const router = useRouter();
   const descRef = useRef<HTMLTextAreaElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const [contents, setContents] = useState<File[]>([]);
   const [isShowUploadButton, setIsShowUploadButton] = useState(true);
+  const authHintCookieName = "copystagram-token";
+  const [cookies, ,] = useCookies([authHintCookieName]);
+
+  useEffect(() => {
+    if (!cookies[authHintCookieName]) {
+      router.push("/auth/login");
+    }
+  }, [cookies]);
 
   useEffect(() => {
     if (contents.length > 0) {
