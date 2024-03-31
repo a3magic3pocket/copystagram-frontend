@@ -12,9 +12,10 @@ export default function Page() {
           <MessageIcon className="flex self-center p-2" />
         </div>
       </div>
-      {[...Array(3)].map((_, i) => {
+      <div>main</div>
+      {/* {[...Array(3)].map((_, i) => {
         return <Post key={i} />;
-      })}
+      })} */}
     </div>
   );
 }

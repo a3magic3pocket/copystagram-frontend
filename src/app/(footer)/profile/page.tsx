@@ -25,9 +25,9 @@ export default function Page() {
   const [pageNum, setPageNum] = useState<number>(1);
   const [emptyPageNum, setEmptyPageNum] = useState<number>(-1);
   const [showModal, setShowModal] = useState(false);
-  const [selectedPostIndex, setSetselectedPostIndex] = useState(-1);
+  const [selectedPostIndex, setSelectedPostIndex] = useState(-1);
 
-  const [q1, q2] = useQueries({
+  const [qryUserInfo, qryPostInfos] = useQueries({
     queries: [
       {
         queryKey: [urlKey.COPYSTAGRAM_GET_MY_USER_INFO],
@@ -43,7 +43,7 @@ export default function Page() {
   });
 
   const handleClickThumb = (i: number) => {
-    setSetselectedPostIndex(i);
+    setSelectedPostIndex(i);
     setShowModal(true);
   };
 
@@ -66,7 +66,7 @@ export default function Page() {
     }
 
     // 로딩 중에는 observing 금지
-    if (q2.isLoading) {
+    if (qryPostInfos.isLoading) {
       postBottomDisconnect(postBottomRef.current);
       postBottomDetailDisconnect(postDetailBottomRef.current);
     }
@@ -75,17 +75,21 @@ export default function Page() {
       postBottomObserve(postBottomRef.current);
       postBottomDetailObserve(postDetailBottomRef.current);
     }
-  }, [postBottomRef?.current, postDetailBottomRef?.current, q2.isLoading]);
+  }, [
+    postBottomRef?.current,
+    postDetailBottomRef?.current,
+    qryPostInfos.isLoading,
+  ]);
 
   useEffect(() => {
-    const postInfoList: IPostInfoList = q2.data?.data;
+    const postInfoList: IPostInfoList = qryPostInfos.data?.data;
     if (postInfoList && postInfoList.posts) {
       setPosts([...posts, ...postInfoList.posts]);
     }
-  }, [q2.data]);
+  }, [qryPostInfos.data]);
 
   useEffect(() => {
-    const postInfoList: IPostInfoList = q2.data?.data;
+    const postInfoList: IPostInfoList = qryPostInfos.data?.data;
     const isPostInfosEmpty =
       postInfoList &&
       postInfoList.pageNum > 1 &&
@@ -100,7 +104,7 @@ export default function Page() {
     else if (isPostInfosEmpty && pageNum > emptyPageNum) {
       setPageNum(emptyPageNum);
     }
-  }, [q2.data, emptyPageNum, pageNum]);
+  }, [qryPostInfos.data, emptyPageNum, pageNum]);
 
   useEffect(() => {
     if (showModal && selectedPostIndex > 0 && modalRef.current) {
@@ -114,11 +118,11 @@ export default function Page() {
     }
   }, [showModal, selectedPostIndex, modalRef.current]);
 
-  if (q1.isError || q2.isError) {
+  if (qryUserInfo.isError || qryPostInfos.isError) {
     router.push("/error");
   }
 
-  if (q1.isLoading) {
+  if (qryUserInfo.isLoading) {
     return (
       <div className="flex w-full justify-center items-center">
         <Loading />
@@ -129,7 +133,7 @@ export default function Page() {
   return (
     <div className="flex flex-col w-full">
       <div className="flex flex-row w-full justify-between">
-        <div className="flex text-4xl pl-2">{q1.data?.data.name}</div>
+        <div className="flex text-4xl pl-2">{qryUserInfo.data?.data.name}</div>
       </div>
       <div className="flex flex-row justify-start">
         <div className="flex relative w-20 m-4 aspect-square rounded-full bg-yellow-500">
@@ -156,7 +160,7 @@ export default function Page() {
           </div>
         </div>
       </div>
-      <div className="flex p-2">{q1.data?.data.description}</div>
+      <div className="flex p-2">{qryUserInfo.data?.data.description}</div>
       <div className="flex flex-row justify-evenly pb-2">
         <button className="flex w-[calc(100%/2-0.8rem)] rounded-lg bg-stone-700 justify-center items-center">
           프로필 편집
@@ -186,7 +190,7 @@ export default function Page() {
             );
           })}
       </div>
-      {q2.isLoading && <Loading />}
+      {qryPostInfos.isLoading && <Loading />}
       <div ref={postBottomRef}></div>
 
       <Modal showModal={showModal} ref={modalRef}>
@@ -208,7 +212,7 @@ export default function Page() {
             );
           })}
         <div ref={postDetailBottomRef}></div>
-        {q2.isLoading && <Loading />}
+        {qryPostInfos.isLoading && <Loading />}
       </Modal>
     </div>
   );
