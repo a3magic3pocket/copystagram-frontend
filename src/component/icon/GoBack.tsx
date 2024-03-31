@@ -6,7 +6,8 @@ export default function GoBackIcon(props: IIconProps) {
     <FontAwesomeIcon
       icon={faChevronLeft}
       size="lg"
-      className={props.className || "flex self-center"}
+      className={props.className || "flex self-center clickable"}
+      onClick={props.onClick}
     />
   );
 }

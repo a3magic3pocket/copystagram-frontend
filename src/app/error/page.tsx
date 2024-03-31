@@ -1,4 +1,4 @@
-import Title from "@/component/Title";
+import Title from "@/component/title/Title";
 import Link from "next/link";
 
 export default function Page() {

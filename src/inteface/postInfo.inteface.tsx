@@ -1,4 +1,4 @@
-export interface IPost {
+export interface IPostInfo {
   ownerName: string;
   description: string;
   thumbImagePath: string;

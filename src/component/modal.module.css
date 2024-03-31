@@ -1,0 +1,24 @@
+.modal-overlay-wrap {
+  background-color: green;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  height: 100%;
+  overflow-y: scroll;
+}
+
+.modal-hidden {
+  display: none;
+}
+
+.modal-wrap {
+  background-color: firebrick;
+  width: var(--main-content-wrap-width);
+  min-height: 100vh;
+}

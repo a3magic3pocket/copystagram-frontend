@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 import PositiveBtn from "@/component/button/PositiveBtn";
-import Title from "@/component/Title";
+import Title from "@/component/title/Title";
 import axios from "axios";
 
 export default function Page() {

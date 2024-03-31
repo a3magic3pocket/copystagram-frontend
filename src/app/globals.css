@@ -31,9 +31,17 @@ body {
   color: white;
 }
 
+body.modal-open {
+  overflow: hidden;
+}
+
+:root {
+  --main-content-wrap-width: 430px;
+}
+
 .main-content-wrap {
   display: flex;
-  width: 430px;
+  width: var(--main-content-wrap-width);
   min-height: 100vh;
 }
 
@@ -41,3 +49,6 @@ body {
   padding-bottom: 2.8rem !important;
 }
 
+.clickable {
+  cursor: pointer;
+}

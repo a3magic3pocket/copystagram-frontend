@@ -4,5 +4,6 @@ declare global {
   interface IIconProps {
     className?: string;
     size?: SizeProp;
+    onClick?: () => void;
   }
 }

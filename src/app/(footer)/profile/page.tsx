@@ -10,15 +10,22 @@ import { useQueries } from "@tanstack/react-query";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import type { IPostList } from "@/inteface/postList.inteface";
-import type { IPost } from "@/inteface/post.inteface";
+import Modal from "@/component/Modal";
+import type { IPostInfoList } from "@/inteface/postInfoList.inteface";
+import type { IPostInfo } from "@/inteface/postInfo.inteface";
+import Post from "@/component/Post";
+import BaseTitle from "@/component/title/BaseTitle";
 
 export default function Page() {
   const router = useRouter();
-  const [posts, setPosts] = useState<IPost[]>([]);
   const postBottomRef = useRef<HTMLDivElement>(null);
+  const postDetailBottomRef = useRef<HTMLDivElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
+  const [posts, setPosts] = useState<IPostInfo[]>([]);
   const [pageNum, setPageNum] = useState<number>(1);
   const [emptyPageNum, setEmptyPageNum] = useState<number>(-1);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedPostIndex, setSetselectedPostIndex] = useState(-1);
 
   const [q1, q2] = useQueries({
     queries: [
@@ -35,44 +42,74 @@ export default function Page() {
     ],
   });
 
-  const [observe, disconnect] = useIntersectionObserver(() => {
+  const handleClickThumb = (i: number) => {
+    setSetselectedPostIndex(i);
+    setShowModal(true);
+  };
+
+  const [postBottomObserve, postBottomDisconnect] = useIntersectionObserver(() => {
+    setPageNum((pageNum) => pageNum + 1);
+  });
+  const [postBottomDetailObserve, postBottomDetailDisconnect] = useIntersectionObserver(() => {
     setPageNum((pageNum) => pageNum + 1);
   });
 
   useEffect(() => {
-    if (postBottomRef?.current === null) {
+    if (
+      postBottomRef?.current === null ||
+      postDetailBottomRef?.current === null
+    ) {
       return;
     }
 
+    // 로딩 중에는 observing 금지
     if (q2.isLoading) {
-      disconnect(postBottomRef.current);
-    } else {
-      observe(postBottomRef.current);
+      postBottomDisconnect(postBottomRef.current);
+      postBottomDetailDisconnect(postDetailBottomRef.current);
     }
-  }, [postBottomRef?.current, q2.isLoading]);
+    // 로딩이 끝나면 다시 observing 시작
+    else {
+      postBottomObserve(postBottomRef.current);
+      postBottomDetailObserve(postDetailBottomRef.current);
+    }
+  }, [postBottomRef?.current, postDetailBottomRef?.current, q2.isLoading]);
 
   useEffect(() => {
-    const postList: IPostList = q2.data?.data;
-    if (postList && postList.posts) {
-      setPosts([...posts, ...postList.posts]);
+    const postInfoList: IPostInfoList = q2.data?.data;
+    if (postInfoList && postInfoList.posts) {
+      setPosts([...posts, ...postInfoList.posts]);
     }
   }, [q2.data]);
 
   useEffect(() => {
-    const postList: IPostList = q2.data?.data;
-    const isPostsEmpty =
-      postList && postList.pageNum > 1 && postList.posts.length === 0;
+    const postInfoList: IPostInfoList = q2.data?.data;
+    const isPostInfosEmpty =
+      postInfoList &&
+      postInfoList.pageNum > 1 &&
+      postInfoList.posts.length === 0;
 
     // 마지막 페이지 기록
-    if (isPostsEmpty && emptyPageNum < 0) {
-      setEmptyPageNum(postList.pageNum);
+    if (isPostInfosEmpty && emptyPageNum < 0) {
+      setEmptyPageNum(postInfoList.pageNum);
     }
-    // 마지막 페이지가 비었음에도 다음 페이지를 조회하였다면
+    // 이전 페이지 결과가 비었음(empty)에도 다음 페이지를 조회하였다면
     // pageNum 재조정
-    else if (isPostsEmpty && pageNum > emptyPageNum) {
+    else if (isPostInfosEmpty && pageNum > emptyPageNum) {
       setPageNum(emptyPageNum);
     }
   }, [q2.data, emptyPageNum, pageNum]);
+
+  useEffect(() => {
+    if (showModal && selectedPostIndex > 0 && modalRef.current) {
+      let i = selectedPostIndex;
+      const elem = modalRef.current.querySelector(
+        `#post-detail-${selectedPostIndex}`
+      );
+      if (elem) {
+        elem.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, [showModal, selectedPostIndex, modalRef.current]);
 
   if (q1.isError || q2.isError) {
     router.push("/error");
@@ -127,14 +164,14 @@ export default function Page() {
       </div>
       <div className="flex justify-start items-center flex-wrap">
         {posts &&
-          posts.map((post: any) => {
-            const thumbImagePath = getImageUrl(post.thumbImagePath);
-            // console.log("thumbImagePath", thumbImagePath);
+          posts.map((postInfo: IPostInfo, i) => {
+            const thumbImagePath = getImageUrl(postInfo.thumbImagePath);
 
             return (
               <div
-                className="flex w-[calc(100%/3)] aspect-square border border-black border-solid"
-                key={post.thumbImagePath}
+                className="flex w-[calc(100%/3)] aspect-square border border-black border-solid clickable"
+                key={`thumb-${postInfo.thumbImagePath}-${i}`}
+                onClick={() => handleClickThumb(i)}
               >
                 <Image
                   src={thumbImagePath}
@@ -145,12 +182,6 @@ export default function Page() {
               </div>
             );
           })}
-
-        {/* {[...Array(100)].map((_, i) => {
-          return (
-            <div className="flex w-[calc(100%/3)] aspect-square border border-black border-solid bg-red-500"></div>
-          );
-        })} */}
       </div>
       {q2.isLoading && (
         <div className="flex justify-center items-center">
@@ -158,6 +189,32 @@ export default function Page() {
         </div>
       )}
       <div ref={postBottomRef}></div>
+
+      <Modal showModal={showModal} ref={modalRef}>
+        <BaseTitle
+          title={"탐색 탭"}
+          onClick={() => {
+            setShowModal(false);
+          }}
+        />
+        {posts &&
+          posts.map((post, i) => {
+            return (
+              <div
+                key={`modal-${post.thumbImagePath}-${i}`}
+                id={`post-detail-${i}`}
+              >
+                <Post {...post} />
+              </div>
+            );
+          })}
+        <div ref={postDetailBottomRef}></div>
+        {q2.isLoading && (
+          <div className="flex justify-center items-center">
+            <Loading />
+          </div>
+        )}
+      </Modal>
     </div>
   );
 }
