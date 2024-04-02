@@ -6,9 +6,12 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 import PositiveBtn from "@/component/button/PositiveBtn";
 import Title from "@/component/title/Title";
-import axios from "axios";
+import { AxiosError, isAxiosError } from "axios";
 import { useCookies } from "react-cookie";
 import { useRouter } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
+import { createPost } from "@/query/copystagram/createPost";
+import Swal from "sweetalert2";
 
 export default function Page() {
   const router = useRouter();
@@ -16,8 +19,46 @@ export default function Page() {
   const fileRef = useRef<HTMLInputElement>(null);
   const [contents, setContents] = useState<File[]>([]);
   const [isShowUploadButton, setIsShowUploadButton] = useState(true);
+  const [slidesPerView, setSlidesPerView] = useState(2);
   const authHintCookieName = "copystagram-token";
   const [cookies, ,] = useCookies([authHintCookieName]);
+
+  const mut = useMutation({
+    mutationFn: (formData: FormData) => createPost(formData),
+    onError: (error: Error) => {
+      if (!isAxiosError(error)) {
+        router.push("/error");
+      }
+
+      const axiosError = error as AxiosError;
+      if (axiosError.response?.status === 422) {
+        const data = axiosError.response.data as any;
+        let { message } = data;
+
+        Swal.fire({
+          title: message,
+          icon: "error",
+        });
+
+        return;
+      }
+
+      Swal.fire({
+        title: "알 수 없는 오류 발생",
+        icon: "warning",
+      });
+      return;
+    },
+    onSuccess: () => {
+      Swal.fire({
+        title: "글 생성 요청 완료",
+        text: "약 1분 정도 소요됩니다.",
+        icon: "success",
+      }).then(() => {
+        router.push("/");
+      });
+    },
+  });
 
   useEffect(() => {
     if (!cookies[authHintCookieName]) {
@@ -34,23 +75,25 @@ export default function Page() {
   }, [contents]);
 
   const handleFiles = (files: FileList | null) => {
-    if (files === null) {
-      return;
-    }
-
     const contents = [];
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      const isImage = /^image\/.+/.test(file.type);
-      if (isImage) {
-        contents.push(file);
+
+    if (files !== null) {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const isImage = /^image\/.+/.test(file.type);
+        if (isImage) {
+          contents.push(file);
+        }
       }
     }
 
     contents.push(new File([], "empty"));
+    setContents(contents);
 
-    if (contents.length > 0) {
-      setContents(contents);
+    if (contents.length > 1) {
+      setSlidesPerView(2);
+    } else {
+      setSlidesPerView(1);
     }
   };
 
@@ -66,13 +109,7 @@ export default function Page() {
     });
     formData.append("description", description || "");
 
-    const url = "http://localhost:8080/v1/post";
-    axios.post(url, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-      withCredentials: true,
-    });
+    mut.mutate(formData);
   };
 
   return (
@@ -109,11 +146,12 @@ export default function Page() {
       >
         <div className="flex w-full">
           <Swiper
-            slidesPerView={2}
+            slidesPerView={slidesPerView}
             spaceBetween={2}
             pagination={{
               clickable: true,
             }}
+            autoHeight={true}
             modules={[Pagination]}
             className="post-slide"
           >
@@ -123,7 +161,7 @@ export default function Page() {
               return (
                 <SwiperSlide key={fileUrl}>
                   {isLast ? (
-                    <div className="flex flex-col w-full aspect-square justify-center items-center">
+                    <div className="flex flex-col w-full h-[30vh] aspect-square justify-center items-center">
                       <PositiveBtn
                         onClick={() => {
                           fileRef.current?.click();
@@ -135,7 +173,7 @@ export default function Page() {
                     <img
                       src={fileUrl}
                       alt={file.name}
-                      className="w-full aspect-square object-cover rounded-lg"
+                      className="w-full h-[30vh] aspect-square object-cover rounded-lg"
                     />
                   )}
                 </SwiperSlide>
