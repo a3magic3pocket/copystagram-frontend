@@ -1,5 +1,5 @@
 .modal-overlay-wrap {
-  background-color: green;
+  background-color: var(--default-bg-color);
   display: flex;
   justify-content: center;
   align-items: start;
@@ -18,7 +18,7 @@
 }
 
 .modal-wrap {
-  background-color: firebrick;
+  background-color: black;
   width: var(--main-content-wrap-width);
   min-height: 100vh;
 }

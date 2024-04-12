@@ -27,17 +27,18 @@
   src: url("/font/aAdulsaScript.ttf") format("truetype");
 }
 
+:root {
+  --main-content-wrap-width: 430px;
+  --default-bg-color: rgb(22, 1, 1);
+}
+
 body {
   color: white;
-  background-color: rgb(22, 1, 1);
+  background-color: var(--default-bg-color);
 }
 
 body.modal-open {
   overflow: hidden;
-}
-
-:root {
-  --main-content-wrap-width: 430px;
 }
 
 .main-content-wrap {

@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 
 export default function BaseTitle(props: IBaseTitleProps) {
   return (
-    <div className="sticky top-0 grid grid-flow-col justify-stretch p-2 bg-yellow-500 z-50">
+    <div className="sticky top-0 grid grid-flow-col justify-stretch p-2 bg-black z-50">
       <div className="flex justify-start">
         <GoBackIcon onClick={props.onClick} />
       </div>

@@ -154,6 +154,11 @@ export default function Page() {
             autoHeight={true}
             modules={[Pagination]}
             className="post-slide"
+            style={
+              {
+                "--swiper-pagination-bullet-inactive-color": "white",
+              } as React.CSSProperties
+            }
           >
             {contents.map((file, i) => {
               const fileUrl = window.URL.createObjectURL(file);

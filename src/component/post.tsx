@@ -63,7 +63,7 @@ export default function Post(props: IPostInfo) {
           </button>
         </div>
       </div>
-      <div className="flex w-full aspect-square bg-red-500">
+      <div className="flex w-full aspect-square bg-white">
         <Swiper
           slidesPerView={1}
           pagination={{
