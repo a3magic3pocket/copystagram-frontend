@@ -6,8 +6,25 @@ import { getImageUrl } from "@/util/image";
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
+import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { upLike } from "@/query/copystagram/upLike";
+import { downLike } from "@/query/copystagram/downLike";
 
 export default function Post(props: IPostInfo) {
+  const [liked, setLiked] = useState<boolean>(
+    props.numLikes !== null && props.numLikes > 0
+  );
+  const upMut = useMutation({
+    mutationFn: () => upLike(props.postId),
+    onError: (error: Error) => {},
+    onSuccess: () => {},
+  });
+  const downMut = useMutation({
+    mutationFn: () => downLike(props.postId),
+    onError: (error: Error) => {},
+    onSuccess: () => {},
+  });
   const undeveloped = true;
 
   let createdAt = new Date();
@@ -15,6 +32,19 @@ export default function Post(props: IPostInfo) {
     const [year, month, day, hours, minutes, seconds] = props.createdAt;
     createdAt = new Date(year, month - 1, day, hours, minutes, seconds);
   }
+
+  const handleLikeClick = () => {
+    // 좋아요 down
+    if (liked) {
+      downMut.mutate();
+    }
+    // 좋아요 up
+    else {
+      upMut.mutate();
+    }
+
+    setLiked(!liked);
+  };
 
   return (
     <div className="flex flex-col w-full h-full border border-black border-solid">
@@ -57,7 +87,7 @@ export default function Post(props: IPostInfo) {
       </div>
       <div className="flex flex-row justify-stretch">
         <div className="flex flex-row w-[calc(100%/3)]">
-          <LikeIcon />
+          <LikeIcon liked={liked} onClick={handleLikeClick} />
           {!undeveloped && <ReplyIcon />}
           {!undeveloped && <MessageIcon />}
         </div>

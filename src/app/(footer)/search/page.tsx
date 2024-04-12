@@ -15,10 +15,11 @@ import { IPostInfo } from "@/inteface/postInfo.inteface";
 import { IPostInfoList } from "@/inteface/postInfoList.inteface";
 import { getAllPosts } from "@/query/copystagram/getAllPosts";
 import { getImageUrl } from "@/util/image";
-import { useQueries } from "@tanstack/react-query";
+import { useMutation, useQueries } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import Logo from "@/component/Logo";
 import { getRelatedAllPosts } from "@/query/copystagram/getRelatedAllPosts";
+import { clickPost } from "@/query/copystagram/clickPost";
 
 export default function Page() {
   const undeveloped = true;
@@ -56,11 +57,18 @@ export default function Page() {
     ],
   });
 
+  const mut = useMutation({
+    mutationFn: (hookPostId: string) => clickPost(hookPostId),
+    onError: (error: Error) => {},
+    onSuccess: () => {},
+  });
+
   const handleClickThumb = (i: number) => {
     setPostDetails([postThumbs[i]]);
     setShowModal(true);
     setHookPostId(postThumbs[i].postId);
     setDetailPageNum(1);
+    mut.mutate(postThumbs[i].postId);
   };
 
   const [postBottomObserve, postBottomDisconnect] = useIntersectionObserver(
@@ -174,7 +182,7 @@ export default function Page() {
         <Logo />
         <div className="flex flex-row pr-2">
           <Link href="/noti">
-            <LikeIcon className="flex self-center p-2" />
+            <LikeIcon className="flex self-center p-2" liked={false} />
           </Link>
           {!undeveloped && <MessageIcon className="flex self-center p-2" />}
         </div>
@@ -220,7 +228,7 @@ export default function Page() {
                 key={`modal-${post.thumbImagePath}-${i}`}
                 id={`post-detail-${i}`}
               >
-                <Post {...post} />
+                <Post {...post} hookPostId={hookPostId} />
               </div>
             );
           })}

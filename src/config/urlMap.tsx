@@ -20,6 +20,11 @@ urls[urlKey.COPYSTAGRAM_CREATE_POST] = `${copystagramRootUrl}/v1/post`;
 urls[
   urlKey.COPYSTAGRAM_GET_RELATED_ALL_POSTS
 ] = `${copystagramRootUrl}/v1/related-posts`;
+urls[urlKey.COPYSTAGRAM_UP_LIKE] = `${copystagramRootUrl}/v1/like/up`;
+urls[urlKey.COPYSTAGRAM_DOWN_LIKE] = `${copystagramRootUrl}/v1/like/down`;
+urls[
+  urlKey.COPYSTAGRAM_CLICK_POST
+] = `${copystagramRootUrl}/v1/post/click-count`;
 
 export const urlMap = (urlName: string): string => {
   if (urlName in urls) {
