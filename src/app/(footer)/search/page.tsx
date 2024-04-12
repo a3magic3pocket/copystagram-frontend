@@ -14,15 +14,13 @@ import { urlKey } from "@/config/urlMapKey";
 import { IPostInfo } from "@/inteface/postInfo.inteface";
 import { IPostInfoList } from "@/inteface/postInfoList.inteface";
 import { getAllPosts } from "@/query/copystagram/getAllPosts";
-import { getMyLatestPosts } from "@/query/copystagram/getMyLatestPosts";
 import { getImageUrl } from "@/util/image";
 import { useQueries } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
 import Logo from "@/component/Logo";
+import { getRelatedAllPosts } from "@/query/copystagram/getRelatedAllPosts";
 
 export default function Page() {
-  const router = useRouter();
   const undeveloped = true;
   const postBottomRef = useRef<HTMLDivElement>(null);
   const postDetailBottomRef = useRef<HTMLDivElement>(null);
@@ -33,7 +31,7 @@ export default function Page() {
   const [showModal, setShowModal] = useState(false);
   const [thumbsEmptyPageNum, setThumbsEmptyPageNum] = useState<number>(-1);
   const [detailsEmptyPageNum, setDetailsEmptyPageNum] = useState<number>(-1);
-  const [selectedPostIndex, setSelectedPostIndex] = useState(-1);
+  const [hookPostId, setHookPostId] = useState<string>("");
 
   const [qryThumbs, qryDetails] = useQueries({
     queries: [
@@ -45,8 +43,12 @@ export default function Page() {
         staleTime: Infinity,
       },
       {
-        queryKey: [urlKey.COPYSTAGRAM_GET_ALL_POSTS, detailPageNum],
-        queryFn: () => getAllPosts(detailPageNum),
+        queryKey: [
+          urlKey.COPYSTAGRAM_GET_RELATED_ALL_POSTS,
+          detailPageNum,
+          hookPostId,
+        ],
+        queryFn: () => getRelatedAllPosts(detailPageNum, hookPostId),
         // enabled: !!pageNum,
         // placeholderData: keepPreviousData,
         staleTime: Infinity,
@@ -55,9 +57,10 @@ export default function Page() {
   });
 
   const handleClickThumb = (i: number) => {
-    setSelectedPostIndex(i);
     setPostDetails([postThumbs[i]]);
     setShowModal(true);
+    setHookPostId(postThumbs[i].postId);
+    setDetailPageNum(1);
   };
 
   const [postBottomObserve, postBottomDisconnect] = useIntersectionObserver(
@@ -133,7 +136,7 @@ export default function Page() {
   }, [qryThumbs.data, thumbsEmptyPageNum, thumbsPageNum]);
 
   useEffect(() => {
-    const postInfoList: IPostInfoList = qryThumbs.data?.data;
+    const postInfoList: IPostInfoList = qryDetails.data?.data;
     const isPostInfosEmpty =
       postInfoList &&
       postInfoList.pageNum > 1 &&
