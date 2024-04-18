@@ -4,7 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function Page() {
-  const url = "http://localhost:8080/oauth2/authorization/google";
+  const copystagramRootUrl = process.env.NEXT_PUBLIC_COPYSTAGRAM_API_URL;
+  const url = `${copystagramRootUrl}/oauth2/authorization/google`;
 
   return (
     <div className="flex flex-col w-full h-screen justify-center items-center">

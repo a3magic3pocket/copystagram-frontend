@@ -30,7 +30,6 @@ export default function Page() {
   const [showModal, setShowModal] = useState(false);
   const [selectedPostIndex, setSelectedPostIndex] = useState(-1);
   const undeveloped = true;
-  const copystagramRootUrl = process.env.NEXT_PUBLIC_COPYSTAGRAM_API_URL;
 
   const [qryUserInfo, qryPostInfos, qryCountPosts] = useQueries({
     queries: [
