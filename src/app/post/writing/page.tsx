@@ -20,6 +20,8 @@ export default function Page() {
   const [contents, setContents] = useState<File[]>([]);
   const [isShowUploadButton, setIsShowUploadButton] = useState(true);
   const [slidesPerView, setSlidesPerView] = useState(2);
+  const allowedExts = ["png", "jpg", "jpeg"];
+  const [isContainedWrongExts, setIsContainedWrongExts] = useState(false);
   const authHintCookieName = "copystagram-token";
   const [cookies, ,] = useCookies([authHintCookieName]);
 
@@ -76,15 +78,21 @@ export default function Page() {
 
   const handleFiles = (files: FileList | null) => {
     const contents = [];
+    let isContainedWrongExts = false;
 
     if (files !== null) {
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        const isImage = /^image\/.+/.test(file.type);
+        const pattern = new RegExp(`^image\/(?:${allowedExts.join("|")})`);
+        const isImage = pattern.test(file.type);
         if (isImage) {
           contents.push(file);
+        } else {
+          isContainedWrongExts = true;
         }
       }
+
+      setIsContainedWrongExts(isContainedWrongExts);
     }
 
     contents.push(new File([], "empty"));
@@ -185,6 +193,15 @@ export default function Page() {
               );
             })}
           </Swiper>
+        </div>
+        <div
+          className={`${
+            isContainedWrongExts ? "flex" : "hidden"
+          } text-red-300 pl-1}`}
+        >
+          {allowedExts.join(", ")} 파일만 업로드할 수 있습니다.
+          <br />
+          그 외 파일은 제외됩니다.
         </div>
         <div className="flex w-full h-40">
           <textarea
