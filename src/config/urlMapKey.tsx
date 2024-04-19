@@ -10,4 +10,6 @@ export const urlKey = {
   COPYSTAGRAM_UP_LIKE: "copystagram.upLike",
   COPYSTAGRAM_DOWN_LIKE: "copystagram.downLike",
   COPYSTAGRAM_CLICK_POST: "copystagram.clickPost",
+  COPYSTAGRAM_CREATE_NOTI_CHECK: "copystagram.createNotiCheck",
+  COPYSTAGRAM_GET_MY_UNCHECKED_NOTIS: "copystagram.getMyUncheckedNotis",
 };

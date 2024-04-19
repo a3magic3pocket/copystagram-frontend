@@ -20,6 +20,8 @@ import { useEffect, useRef, useState } from "react";
 import Logo from "@/component/Logo";
 import { getRelatedAllPosts } from "@/query/copystagram/getRelatedAllPosts";
 import { clickPost } from "@/query/copystagram/clickPost";
+import { useCookies } from "react-cookie";
+import { getMyUncheckedNotis } from "@/query/copystagram/getMyUncheckedNotis";
 
 export default function Page() {
   const undeveloped = true;
@@ -33,8 +35,11 @@ export default function Page() {
   const [thumbsEmptyPageNum, setThumbsEmptyPageNum] = useState<number>(-1);
   const [detailsEmptyPageNum, setDetailsEmptyPageNum] = useState<number>(-1);
   const [hookPostId, setHookPostId] = useState<string>("");
+  const authHintCookieName =
+    process.env.NEXT_PUBLIC_COPYSTAGRAM_AUTH_HINT_COOKIE_NAME || "";
+  const [cookies, ,] = useCookies([authHintCookieName]);
 
-  const [qryThumbs, qryDetails] = useQueries({
+  const [qryThumbs, qryDetails, qryUncheckedNotis] = useQueries({
     queries: [
       {
         queryKey: [urlKey.COPYSTAGRAM_GET_ALL_POSTS, thumbsPageNum],
@@ -53,6 +58,11 @@ export default function Page() {
         // enabled: !!pageNum,
         // placeholderData: keepPreviousData,
         staleTime: Infinity,
+      },
+      {
+        queryKey: [urlKey.COPYSTAGRAM_GET_MY_UNCHECKED_NOTIS],
+        queryFn: () => getMyUncheckedNotis(),
+        enabled: cookies[authHintCookieName] !== undefined,
       },
     ],
   });
@@ -182,7 +192,13 @@ export default function Page() {
         <Logo />
         <div className="flex flex-row pr-2">
           <Link href="/noti">
-            <LikeIcon className="flex self-center p-2" liked={false} />
+            <div className="flex relative">
+              <LikeIcon className="flex self-center p-2" liked={false} />
+              {qryUncheckedNotis.data?.data &&
+                qryUncheckedNotis.data?.data.length > 0 && (
+                  <div className="absolute bottom-5 left-6 w-2 aspect-square rounded-full bg-red-500"></div>
+                )}
+            </div>
           </Link>
           {!undeveloped && <MessageIcon className="flex self-center p-2" />}
         </div>

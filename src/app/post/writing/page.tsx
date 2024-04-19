@@ -22,7 +22,8 @@ export default function Page() {
   const [slidesPerView, setSlidesPerView] = useState(2);
   const allowedExts = ["png", "jpg", "jpeg"];
   const [isContainedWrongExts, setIsContainedWrongExts] = useState(false);
-  const authHintCookieName = "copystagram-token";
+  const authHintCookieName =
+    process.env.NEXT_PUBLIC_COPYSTAGRAM_AUTH_HINT_COOKIE_NAME || "";
   const [cookies, ,] = useCookies([authHintCookieName]);
 
   const mut = useMutation({
@@ -200,8 +201,7 @@ export default function Page() {
           } text-red-300 pl-1}`}
         >
           {allowedExts.join(", ")} 파일만 업로드할 수 있습니다.
-          <br />
-          그 외 파일은 제외됩니다.
+          <br />그 외 파일은 제외됩니다.
         </div>
         <div className="flex w-full h-40">
           <textarea
