@@ -202,6 +202,12 @@ export default function Page() {
             );
           })}
       </div>
+      {posts && posts.length === 0 && (
+        <div className="flex flex-col w-full h-full justify-center items-center">
+          <p>등록된 글이 없습니다.</p>
+          <p>하단 + 버튼을 눌러 새 글을 작성해주세요 :)</p>
+        </div>
+      )}
       {qryPostInfos.isLoading && <Loading />}
       <div ref={postBottomRef}></div>
 
