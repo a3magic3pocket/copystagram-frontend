@@ -1,4 +1,5 @@
 export interface INotiInfo {
+  notiId: string;
   ownerName: string;
   ownerThumbImagePath: string;
   content: string;

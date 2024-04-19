@@ -25,6 +25,12 @@ urls[urlKey.COPYSTAGRAM_DOWN_LIKE] = `${copystagramRootUrl}/v1/like/down`;
 urls[
   urlKey.COPYSTAGRAM_CLICK_POST
 ] = `${copystagramRootUrl}/v1/post/click-count`;
+urls[
+  urlKey.COPYSTAGRAM_CREATE_NOTI_CHECK
+] = `${copystagramRootUrl}/v1/noti-check`;
+urls[
+  urlKey.COPYSTAGRAM_GET_MY_UNCHECKED_NOTIS
+] = `${copystagramRootUrl}/v1/my-notifications/unchecked`;
 
 export const urlMap = (urlName: string): string => {
   if (urlName in urls) {

@@ -6,6 +6,8 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { QueryProvider } from "../query";
+import NavigationEvents from "@/component/navigationEvents/NavigationEvents";
+import NotiCheckCreation from "@/component/navigationEvents/NotiCheckCreation";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,12 +29,20 @@ export default function RootLayout({
       <body className={inter.className}>
         <div className="flex justify-center items-center">
           <div className="flex flex-col main-content-wrap bg-black border border-black border-solid">
-            <QueryProvider>{children}</QueryProvider>
+            <QueryProvider>
+              {children}
+              <div className="hidden">
+                <NotiCheckCreation />
+              </div>
+            </QueryProvider>
           </div>
         </div>
         <div className="hidden">
           This favicon was generated using the following graphics from Twitter
           Twemoji
+        </div>
+        <div className="hidden">
+          <NavigationEvents />
         </div>
         {/* 430 x 932 */}
       </body>
