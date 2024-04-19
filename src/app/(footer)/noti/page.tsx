@@ -92,6 +92,11 @@ export default function Page() {
             </div>
           );
         })}
+      {notis && notis.length === 0 && (
+        <div className="flex w-full h-full justify-center items-center">
+          등록된 알림이 없습니다.
+        </div>
+      )}
       {qryNotis.isLoading && <Loading />}
 
       {/* Prevent pagination temporary */}
