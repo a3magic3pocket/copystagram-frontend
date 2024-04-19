@@ -58,6 +58,7 @@ export default function Page() {
         // enabled: !!pageNum,
         // placeholderData: keepPreviousData,
         staleTime: Infinity,
+        enabled: cookies[authHintCookieName] !== undefined && hookPostId !== "",
       },
       {
         queryKey: [urlKey.COPYSTAGRAM_GET_MY_UNCHECKED_NOTIS],
@@ -123,10 +124,22 @@ export default function Page() {
 
   useEffect(() => {
     const postInfoList: IPostInfoList = qryThumbs.data?.data;
+    console.log("ORIGIN:: postInfoList", postInfoList);
     if (postInfoList && postInfoList.posts) {
       setPostThumbs([...postThumbs, ...postInfoList.posts]);
     }
   }, [qryThumbs.data]);
+
+  useEffect(() => {
+    // 로그인을 하지 않은 경우
+    if (
+      cookies[authHintCookieName] === undefined &&
+      hookPostId !== "" &&
+      showModal
+    ) {
+      setPostDetails(postThumbs);
+    }
+  }, [postThumbs, cookies, hookPostId, showModal]);
 
   useEffect(() => {
     const postInfoList: IPostInfoList = qryDetails.data?.data;
@@ -238,16 +251,20 @@ export default function Page() {
           }}
         />
         {postDetails &&
-          postDetails.map((post, i) => {
-            return (
-              <div
-                key={`modal-${post.thumbImagePath}-${i}`}
-                id={`post-detail-${i}`}
-              >
-                <Post {...post} hookPostId={hookPostId} />
-              </div>
-            );
-          })}
+          postDetails
+            .filter(
+              (post, i) => i == 0 || (i !== 0 && post.postId !== hookPostId)
+            )
+            .map((post, i) => {
+              return (
+                <div
+                  key={`modal-${post.thumbImagePath}-${i}`}
+                  id={`post-detail-${i}`}
+                >
+                  <Post {...post} hookPostId={hookPostId} />
+                </div>
+              );
+            })}
         <div ref={postDetailBottomRef}></div>
         {qryDetails.isLoading && <Loading />}
       </Modal>

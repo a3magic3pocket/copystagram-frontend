@@ -6,11 +6,14 @@ export const getRelatedAllPosts = async (
   pageNum: number,
   hookPostId: string
 ) => {
-  const url = urlMap(urlKey.COPYSTAGRAM_GET_ALL_POSTS);
+  const url = urlMap(urlKey.COPYSTAGRAM_GET_RELATED_ALL_POSTS);
+  const params: { [name: string]: any } = {
+    "page-num": pageNum,
+    "hook-post-id": hookPostId,
+  };
+
   return await axios.get(url, {
-    params: {
-      "page-num": pageNum,
-      "hook-post-id": hookPostId,
-    },
+    params,
+    withCredentials: true,
   });
 };
