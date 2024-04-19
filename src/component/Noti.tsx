@@ -30,7 +30,7 @@ export default function Noti(props: INotiInfo) {
       </div>
 
       {/* user image */}
-      {props.postThumbImagePath && (
+      {props.postThumbImagePath ? (
         <div className="flex w-10 m-4 aspect-square rounded-md bg-yellow-500">
           <Image
             src={getImageUrl(props.postThumbImagePath)}
@@ -39,6 +39,8 @@ export default function Noti(props: INotiInfo) {
             height={50}
           />
         </div>
+      ) : (
+        <div className="flex w-10 m-4 aspect-square rounded-md bg-transparent"></div>
       )}
     </div>
   );
