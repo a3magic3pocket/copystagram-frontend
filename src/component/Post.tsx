@@ -16,12 +16,12 @@ export default function Post(props: IPostInfo) {
     props.numLikes !== null && props.numLikes > 0
   );
   const upMut = useMutation({
-    mutationFn: () => upLike(props.postId),
+    mutationFn: () => upLike(props.postId, props.hookPostId),
     onError: (error: Error) => {},
     onSuccess: () => {},
   });
   const downMut = useMutation({
-    mutationFn: () => downLike(props.postId),
+    mutationFn: () => downLike(props.postId, props.hookPostId),
     onError: (error: Error) => {},
     onSuccess: () => {},
   });
