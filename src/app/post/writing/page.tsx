@@ -65,7 +65,7 @@ export default function Page() {
 
   useEffect(() => {
     if (!cookies[authHintCookieName]) {
-      router.push("/auth/login");
+      router.replace("/auth/login");
     }
   }, [cookies]);
 

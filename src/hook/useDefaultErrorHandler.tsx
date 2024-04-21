@@ -10,7 +10,7 @@ export default function useDefaultErrorHandler() {
     }
 
     if (error.response?.status === 401) {
-      router.push("/auth/login");
+      router.replace("/auth/login");
     }
   };
 }
