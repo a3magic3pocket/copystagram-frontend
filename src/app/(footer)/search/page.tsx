@@ -131,7 +131,6 @@ export default function Page() {
 
   useEffect(() => {
     const postInfoList: IPostInfoList = qryThumbs.data?.data;
-    console.log("ORIGIN:: postInfoList", postInfoList);
     if (postInfoList && postInfoList.posts) {
       setPostThumbs([...postThumbs, ...postInfoList.posts]);
     }
