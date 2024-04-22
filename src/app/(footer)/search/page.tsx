@@ -140,7 +140,7 @@ export default function Page() {
   useEffect(() => {
     // 로그인을 하지 않은 경우
     if (!isLoggedIn && hookPostId !== "" && showModal) {
-      setPostDetails(postThumbs);
+      setPostDetails([...postDetails, ...postThumbs]);
     }
   }, [postThumbs, cookies, hookPostId, showModal]);
 
