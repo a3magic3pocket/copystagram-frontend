@@ -190,7 +190,7 @@ export default function Page() {
   // post width 설정
   useEffect(() => {
     if (window.innerWidth < defaultWrapWidth) {
-      setPostWidth(window.innerWidth);
+      setPostWidth(window.innerWidth - 2);
     }
   }, []);
 
