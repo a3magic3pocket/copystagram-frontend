@@ -137,6 +137,17 @@ export default function Page() {
     }
   }, []);
 
+  useEffect(() => {
+    if (showModal) {
+      window.history.pushState(null, "", location.href);
+      window.onpopstate = (e) => {
+        setShowModal(false);
+      };
+    } else {
+      window.onpopstate = () => {};
+    }
+  }, [showModal]);
+
   if (
     qryUserInfo.isLoading ||
     qryCountPosts.isLoading ||

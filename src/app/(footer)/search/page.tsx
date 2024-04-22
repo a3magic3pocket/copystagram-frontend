@@ -192,6 +192,17 @@ export default function Page() {
     }
   }, []);
 
+  useEffect(() => {
+    if (showModal) {
+      window.history.pushState(null, "", location.href);
+      window.onpopstate = (e) => {
+        setShowModal(false);
+      };
+    } else {
+      window.onpopstate = () => {};
+    }
+  }, [showModal]);
+
   return (
     <div className="flex flex-col w-full h-full">
       {/* search bar */}
