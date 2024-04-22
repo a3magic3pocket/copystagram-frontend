@@ -46,6 +46,15 @@ export default function Page() {
         return;
       }
 
+      if (axiosError.response?.status === 413) {
+        Swal.fire({
+          title: "이미지 용량의 합은 10M보다 작아야 합니다.",
+          icon: "error",
+        });
+
+        return;
+      }
+
       Swal.fire({
         title: "알 수 없는 오류 발생",
         icon: "warning",
