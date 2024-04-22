@@ -39,6 +39,7 @@ export default function Page() {
   const authHintCookieName =
     process.env.NEXT_PUBLIC_COPYSTAGRAM_AUTH_HINT_COOKIE_NAME || "";
   const [cookies, ,] = useCookies([authHintCookieName]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [postWidth, setPostWidth] = useState(defaultWrapWidth);
 
   const [qryThumbs, qryDetails, qryUncheckedNotis] = useQueries({
@@ -60,12 +61,12 @@ export default function Page() {
         // enabled: !!pageNum,
         // placeholderData: keepPreviousData,
         staleTime: Infinity,
-        enabled: cookies[authHintCookieName] !== undefined && hookPostId !== "",
+        enabled: isLoggedIn && hookPostId !== "",
       },
       {
         queryKey: [urlKey.COPYSTAGRAM_GET_MY_UNCHECKED_NOTIS],
         queryFn: () => getMyUncheckedNotis(),
-        enabled: cookies[authHintCookieName] !== undefined,
+        enabled: isLoggedIn,
       },
     ],
   });
@@ -93,6 +94,10 @@ export default function Page() {
     useIntersectionObserver(() => {
       setDetailPageNum((pageNum) => pageNum + 1);
     });
+
+  useEffect(() => {
+    setIsLoggedIn(cookies[authHintCookieName] !== undefined);
+  }, [cookies]);
 
   useEffect(() => {
     if (postBottomRef?.current === null) {
@@ -134,11 +139,7 @@ export default function Page() {
 
   useEffect(() => {
     // 로그인을 하지 않은 경우
-    if (
-      cookies[authHintCookieName] === undefined &&
-      hookPostId !== "" &&
-      showModal
-    ) {
+    if (!isLoggedIn && hookPostId !== "" && showModal) {
       setPostDetails(postThumbs);
     }
   }, [postThumbs, cookies, hookPostId, showModal]);
@@ -186,12 +187,14 @@ export default function Page() {
     }
   }, [qryDetails.data, detailsEmptyPageNum, setDetailPageNum]);
 
+  // post width 설정
   useEffect(() => {
     if (window.innerWidth < defaultWrapWidth) {
       setPostWidth(window.innerWidth);
     }
   }, []);
 
+  // 모달 켜져있을 때 브라우저 뒤로가기 방지
   useEffect(() => {
     if (showModal) {
       window.history.pushState(null, "", location.href);
@@ -284,6 +287,7 @@ export default function Page() {
                     {...post}
                     hookPostId={hookPostId}
                     postWidth={postWidth}
+                    isHiddenLike={!isLoggedIn}
                   />
                 </div>
               );

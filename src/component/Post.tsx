@@ -97,7 +97,9 @@ export default function Post(props: IPostInfo) {
       </div>
       <div className="flex flex-row justify-stretch">
         <div className="flex flex-row w-[calc(100%/3)]">
-          <LikeIcon liked={liked} onClick={handleLikeClick} />
+          {!props.isHiddenLike && (
+            <LikeIcon liked={liked} onClick={handleLikeClick} />
+          )}
           {!undeveloped && <ReplyIcon />}
           {!undeveloped && <MessageIcon />}
         </div>

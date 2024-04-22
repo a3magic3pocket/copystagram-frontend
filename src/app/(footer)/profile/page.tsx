@@ -252,7 +252,7 @@ export default function Page() {
                 key={`modal-${post.thumbImagePath}-${i}`}
                 id={`post-detail-${i}`}
               >
-                <Post {...post} postWidth={postWidth} />
+                <Post {...post} postWidth={postWidth} isHiddenLike={false} />
               </div>
             );
           })}

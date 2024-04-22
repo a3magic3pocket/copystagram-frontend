@@ -5,7 +5,8 @@ export interface IPostInfo {
   description: string;
   thumbImagePath: string;
   numLikes: number;
-  postWidth: number;
   contentImagePaths: string[];
   createdAt: number[];
+  postWidth: number;
+  isHiddenLike: boolean;
 }
