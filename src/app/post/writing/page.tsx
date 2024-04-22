@@ -48,7 +48,10 @@ export default function Page() {
         return;
       }
 
-      if (axiosError.response?.status === 413) {
+      if (
+        axiosError.code === "ERR_NETWORK" ||
+        axiosError.response?.status === 413
+      ) {
         Swal.fire({
           title: "이미지 용량의 합은 10M보다 작아야 합니다.",
           icon: "error",
