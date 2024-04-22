@@ -18,6 +18,7 @@ import BaseTitle from "@/component/title/BaseTitle";
 import { countMyPosts } from "@/query/copystagram/countMyPosts";
 import PositiveButton from "@/component/button/PositiveBtn";
 import { urlMap } from "@/config/urlMap";
+import { defaultWrapWidth } from "@/config/config";
 
 export default function Page() {
   const router = useRouter();
@@ -29,6 +30,7 @@ export default function Page() {
   const [emptyPageNum, setEmptyPageNum] = useState<number>(-1);
   const [showModal, setShowModal] = useState(false);
   const [selectedPostIndex, setSelectedPostIndex] = useState(-1);
+  const [postWidth, setPostWidth] = useState(defaultWrapWidth);
   const undeveloped = true;
 
   const [qryUserInfo, qryPostInfos, qryCountPosts] = useQueries({
@@ -129,6 +131,12 @@ export default function Page() {
     }
   }, [showModal, selectedPostIndex, modalRef.current]);
 
+  useEffect(() => {
+    if (window.innerWidth < defaultWrapWidth) {
+      setPostWidth(window.innerWidth);
+    }
+  }, []);
+
   if (
     qryUserInfo.isLoading ||
     qryCountPosts.isLoading ||
@@ -142,7 +150,7 @@ export default function Page() {
       <div className="flex flex-row w-full justify-between">
         <div className="flex text-4xl pl-2">{qryUserInfo.data?.data.name}</div>
       </div>
-      <div className="flex flex-row justify-start">
+      <div className="flex flex-row justify-evenly">
         <div className="flex relative w-20 m-4 aspect-square rounded-full bg-yellow-500">
           <div className="flex absolute top-10 left-10 w-6 m-4 aspect-square rounded-full bg-blue-500 border-4 border-black border-solid">
             <div className="relative">
@@ -152,7 +160,7 @@ export default function Page() {
             </div>
           </div>
         </div>
-        <div className="flex flex-row w-80 justify-evenly items-center">
+        <div className="flex flex-row w-45 justify-evenly items-center">
           <div className="flex flex-col items-center px-5">
             <p>{qryCountPosts.data ? qryCountPosts.data?.data.count : 0}</p>
             <p className="text-sm">게시글</p>
@@ -233,7 +241,7 @@ export default function Page() {
                 key={`modal-${post.thumbImagePath}-${i}`}
                 id={`post-detail-${i}`}
               >
-                <Post {...post} />
+                <Post {...post} postWidth={postWidth} />
               </div>
             );
           })}

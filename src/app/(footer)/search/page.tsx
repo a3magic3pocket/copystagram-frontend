@@ -22,6 +22,7 @@ import { getRelatedAllPosts } from "@/query/copystagram/getRelatedAllPosts";
 import { clickPost } from "@/query/copystagram/clickPost";
 import { useCookies } from "react-cookie";
 import { getMyUncheckedNotis } from "@/query/copystagram/getMyUncheckedNotis";
+import { defaultWrapWidth } from "@/config/config";
 
 export default function Page() {
   const undeveloped = true;
@@ -38,6 +39,7 @@ export default function Page() {
   const authHintCookieName =
     process.env.NEXT_PUBLIC_COPYSTAGRAM_AUTH_HINT_COOKIE_NAME || "";
   const [cookies, ,] = useCookies([authHintCookieName]);
+  const [postWidth, setPostWidth] = useState(defaultWrapWidth);
 
   const [qryThumbs, qryDetails, qryUncheckedNotis] = useQueries({
     queries: [
@@ -184,6 +186,12 @@ export default function Page() {
     }
   }, [qryDetails.data, detailsEmptyPageNum, setDetailPageNum]);
 
+  useEffect(() => {
+    if (window.innerWidth < defaultWrapWidth) {
+      setPostWidth(window.innerWidth);
+    }
+  }, []);
+
   return (
     <div className="flex flex-col w-full h-full">
       {/* search bar */}
@@ -261,7 +269,11 @@ export default function Page() {
                   key={`modal-${post.thumbImagePath}-${i}`}
                   id={`post-detail-${i}`}
                 >
-                  <Post {...post} hookPostId={hookPostId} />
+                  <Post
+                    {...post}
+                    hookPostId={hookPostId}
+                    postWidth={postWidth}
+                  />
                 </div>
               );
             })}

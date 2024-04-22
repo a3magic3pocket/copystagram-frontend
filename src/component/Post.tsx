@@ -70,15 +70,25 @@ export default function Post(props: IPostInfo) {
             clickable: true,
           }}
           modules={[Pagination]}
+          style={{
+            width: `${props.postWidth}px`,
+            // height: `${props.postWidth}px`,
+          }}
         >
           {props.contentImagePaths.map((imagePath, i) => {
             return (
-              <SwiperSlide key={imagePath}>
+              <SwiperSlide
+                key={imagePath}
+                style={{
+                  width: `${props.postWidth}px`,
+                  height: `${props.postWidth}px`,
+                }}
+              >
                 <Image
                   src={getImageUrl(imagePath)}
                   alt={"post-image"}
-                  width={500}
-                  height={500}
+                  width={props.postWidth}
+                  height={props.postWidth}
                 />
               </SwiperSlide>
             );
