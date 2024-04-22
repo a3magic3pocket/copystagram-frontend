@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { createPost } from "@/query/copystagram/createPost";
 import Swal from "sweetalert2";
+import { defaultWrapWidth } from "@/config/config";
 
 export default function Page() {
   const router = useRouter();
@@ -25,6 +26,7 @@ export default function Page() {
   const authHintCookieName =
     process.env.NEXT_PUBLIC_COPYSTAGRAM_AUTH_HINT_COOKIE_NAME || "";
   const [cookies, ,] = useCookies([authHintCookieName]);
+  const [postWrapWidth, setPostWrapWidth] = useState(defaultWrapWidth);
 
   const mut = useMutation({
     mutationFn: (formData: FormData) => createPost(formData),
@@ -77,6 +79,13 @@ export default function Page() {
       router.replace("/auth/login");
     }
   }, [cookies]);
+
+  // postWrap width 설정
+  useEffect(() => {
+    if (window.innerWidth < defaultWrapWidth) {
+      setPostWrapWidth(window.innerWidth - 6);
+    }
+  }, []);
 
   useEffect(() => {
     if (contents.length > 0) {
@@ -175,6 +184,7 @@ export default function Page() {
             style={
               {
                 "--swiper-pagination-bullet-inactive-color": "white",
+                width: `${postWrapWidth}px`,
               } as React.CSSProperties
             }
           >
